@@ -1,6 +1,6 @@
 # Netflix Movies and TV Shows Data Analysis using SQL
 
-![]/assets/logo.png
+![](https://github.com/LohithAnalyst/SQL---Streamlytics-Business-Problems/blob/86a65185110957713d5a21d201dd0b3c7fdcfa79/logo.png)
 
 
 ## Overview
