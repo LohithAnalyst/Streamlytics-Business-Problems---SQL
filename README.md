@@ -1,10 +1,10 @@
-# Netflix Movies and TV Shows Data Analysis using SQL
+# Streamlytics Movies and TV Shows Data Analysis using SQL
 
 ![](https://github.com/LohithAnalyst/SQL---Streamlytics-Business-Problems/blob/86a65185110957713d5a21d201dd0b3c7fdcfa79/logo.png)
 
 
 ## Overview
-This project involves a comprehensive analysis of Netflix's movies and TV shows data using SQL. The goal is to extract valuable insights and answer various business questions based on the dataset. The following README provides a detailed account of the project's objectives, business problems, solutions, findings, and conclusions.
+This project involves a comprehensive analysis of Streamlytics's movies and TV shows data using SQL. The goal is to extract valuable insights and answer various business questions based on the dataset. The following README provides a detailed account of the project's objectives, business problems, solutions, findings, and conclusions.
 
 ## Objectives
 
@@ -13,17 +13,11 @@ This project involves a comprehensive analysis of Netflix's movies and TV shows 
 - List and analyze content based on release years, countries, and durations.
 - Explore and categorize content based on specific criteria and keywords.
 
-## Dataset
-
-The data for this project is sourced from the Kaggle dataset:
-
-- **Dataset Link:** [Movies Dataset](https://www.kaggle.com/datasets/shivamb/netflix-shows?resource=download)
-
 ## Schema
 
 ```sql
-DROP TABLE IF EXISTS netflix;
-CREATE TABLE netflix
+DROP TABLE IF EXISTS Streamlytics;
+CREATE TABLE Streamlytics
 (
     show_id      VARCHAR(5),
     type         VARCHAR(10),
@@ -48,11 +42,11 @@ CREATE TABLE netflix
 SELECT 
     type,
     COUNT(*)
-FROM netflix
+FROM Streamlytics
 GROUP BY 1;
 ```
 
-**Objective:** Determine the distribution of content types on Netflix.
+**Objective:** Determine the distribution of content types on Streamlytics.
 
 ### 2. Find the Most Common Rating for Movies and TV Shows
 
@@ -62,7 +56,7 @@ WITH RatingCounts AS (
         type,
         rating,
         COUNT(*) AS rating_count
-    FROM netflix
+    FROM Streamlytics
     GROUP BY type, rating
 ),
 RankedRatings AS (
@@ -86,13 +80,13 @@ WHERE rank = 1;
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Streamlytics
 WHERE release_year = 2020;
 ```
 
 **Objective:** Retrieve all movies released in a specific year.
 
-### 4. Find the Top 5 Countries with the Most Content on Netflix
+### 4. Find the Top 5 Countries with the Most Content on Streamlytics
 
 ```sql
 SELECT * 
@@ -101,7 +95,7 @@ FROM
     SELECT 
         UNNEST(STRING_TO_ARRAY(country, ',')) AS country,
         COUNT(*) AS total_content
-    FROM netflix
+    FROM Streamlytics
     GROUP BY 1
 ) AS t1
 WHERE country IS NOT NULL
@@ -116,7 +110,7 @@ LIMIT 5;
 ```sql
 SELECT 
     *
-FROM netflix
+FROM Streamlytics
 WHERE type = 'Movie'
 ORDER BY SPLIT_PART(duration, ' ', 1)::INT DESC;
 ```
@@ -127,11 +121,11 @@ ORDER BY SPLIT_PART(duration, ' ', 1)::INT DESC;
 
 ```sql
 SELECT *
-FROM netflix
+FROM Streamlytics
 WHERE TO_DATE(date_added, 'Month DD, YYYY') >= CURRENT_DATE - INTERVAL '5 years';
 ```
 
-**Objective:** Retrieve content added to Netflix in the last 5 years.
+**Objective:** Retrieve content added to Streamlytics in the last 5 years.
 
 ### 7. Find All Movies/TV Shows by Director 'Rajiv Chilaka'
 
@@ -141,7 +135,7 @@ FROM (
     SELECT 
         *,
         UNNEST(STRING_TO_ARRAY(director, ',')) AS director_name
-    FROM netflix
+    FROM Streamlytics
 ) AS t
 WHERE director_name = 'Rajiv Chilaka';
 ```
@@ -152,7 +146,7 @@ WHERE director_name = 'Rajiv Chilaka';
 
 ```sql
 SELECT *
-FROM netflix
+FROM Streamlytics
 WHERE type = 'TV Show'
   AND SPLIT_PART(duration, ' ', 1)::INT > 5;
 ```
@@ -165,13 +159,13 @@ WHERE type = 'TV Show'
 SELECT 
     UNNEST(STRING_TO_ARRAY(listed_in, ',')) AS genre,
     COUNT(*) AS total_content
-FROM netflix
+FROM Streamlytics
 GROUP BY 1;
 ```
 
 **Objective:** Count the number of content items in each genre.
 
-### 10.Find each year and the average numbers of content release in India on netflix. 
+### 10.Find each year and the average numbers of content release in India on Streamlytics. 
 return top 5 year with highest avg content release!
 
 ```sql
@@ -181,9 +175,9 @@ SELECT
     COUNT(show_id) AS total_release,
     ROUND(
         COUNT(show_id)::numeric /
-        (SELECT COUNT(show_id) FROM netflix WHERE country = 'India')::numeric * 100, 2
+        (SELECT COUNT(show_id) FROM Streamlytics WHERE country = 'India')::numeric * 100, 2
     ) AS avg_release
-FROM netflix
+FROM Streamlytics
 WHERE country = 'India'
 GROUP BY country, release_year
 ORDER BY avg_release DESC
@@ -196,7 +190,7 @@ LIMIT 5;
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Streamlytics
 WHERE listed_in LIKE '%Documentaries';
 ```
 
@@ -206,7 +200,7 @@ WHERE listed_in LIKE '%Documentaries';
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Streamlytics
 WHERE director IS NULL;
 ```
 
@@ -216,7 +210,7 @@ WHERE director IS NULL;
 
 ```sql
 SELECT * 
-FROM netflix
+FROM Streamlytics
 WHERE casts LIKE '%Salman Khan%'
   AND release_year > EXTRACT(YEAR FROM CURRENT_DATE) - 10;
 ```
@@ -229,7 +223,7 @@ WHERE casts LIKE '%Salman Khan%'
 SELECT 
     UNNEST(STRING_TO_ARRAY(casts, ',')) AS actor,
     COUNT(*)
-FROM netflix
+FROM Streamlytics
 WHERE country = 'India'
 GROUP BY actor
 ORDER BY COUNT(*) DESC
@@ -250,7 +244,7 @@ FROM (
             WHEN description ILIKE '%kill%' OR description ILIKE '%violence%' THEN 'Bad'
             ELSE 'Good'
         END AS category
-    FROM netflix
+    FROM Streamlytics
 ) AS categorized_content
 GROUP BY category;
 ```
@@ -262,23 +256,15 @@ GROUP BY category;
 - **Content Distribution:** The dataset contains a diverse range of movies and TV shows with varying ratings and genres.
 - **Common Ratings:** Insights into the most common ratings provide an understanding of the content's target audience.
 - **Geographical Insights:** The top countries and the average content releases by India highlight regional content distribution.
-- **Content Categorization:** Categorizing content based on specific keywords helps in understanding the nature of content available on Netflix.
+- **Content Categorization:** Categorizing content based on specific keywords helps in understanding the nature of content available on Streamlytics.
 
-This analysis provides a comprehensive view of Netflix's content and can help inform content strategy and decision-making.
+This analysis provides a comprehensive view of Streamlytics's content and can help inform content strategy and decision-making.
 
 
 
-## Author - Zero Analyst
 
-This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles. If you have any questions, feedback, or would like to collaborate, feel free to get in touch!
-
-### Stay Updated and Join the Community
-
-For more content on SQL, data analysis, and other data-related topics, make sure to follow me on social media and join our community:
-
-- **YouTube**: [Subscribe to my channel for tutorials and insights](https://www.youtube.com/@zero_analyst)
-- **Instagram**: [Follow me for daily tips and updates](https://www.instagram.com/zero_analyst/)
-- **LinkedIn**: [Connect with me professionally](https://www.linkedin.com/in/najirr)
-- **Discord**: [Join our community to learn and grow together](https://discord.gg/36h5f2Z5PK)
+## 📬 Contact
+Created by *Lohith*  
+[LinkedIn Profile] https://www.linkedin.com/in/lohithp0807 | [Email] lohithp.official@gmail.com
 
 Thank you for your support, and I look forward to connecting with you!
